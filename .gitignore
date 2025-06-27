@@ -1,0 +1,48 @@
+# Node modules (React)
+client/node_modules/
+client/.vite/
+client/dist/
+
+# Build output
+*.log
+*.env
+.env.*
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+*.egg-info/
+instance/
+*.bak
+
+# Virtual environments
+venv/
+env/
+.venv/
+.pipenv/
+
+# Flask Migrations
+server/migrations/
+server/__pycache__/
+
+# IDEs and system files
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+
+# Byte-compiled / cache
+*.pyc
+*.pyo
+*.pyd
+
+# Testing
+.coverage
+.pytest_cache/
+
+# OS-specific
+.DS_Store
