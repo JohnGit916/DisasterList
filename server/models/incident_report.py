@@ -14,6 +14,7 @@ class IncidentReport(db.Model):
     user = relationship("User", back_populates="reports")
 
     offers = relationship("ResponseOffer", back_populates="incident", cascade="all, delete")
+    responder_entries = relationship("ResponderIncident", back_populates="incident", cascade="all, delete")
 
     def __repr__(self):
         return f"<IncidentReport {self.title}>"
