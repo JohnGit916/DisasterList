@@ -40,11 +40,11 @@ function Dashboard() {
       ) : (
         <ul className="list-group">
           {filteredIncidents.map((incident) => (
-            <li key={incident.id} className="dashboard-card">
-              <Link to={`/incident/${incident.id}`} className="text-decoration-none fw-bold">
+            <li key={incident.id} className="list-group-item dashboard-card">
+              <Link to={`/incident/${incident.id}`} className="fw-bold text-decoration-none">
                 {incident.title}
               </Link>
-              <p className="text-muted mb-0">{incident.location}</p>
+              <p className="mb-0 text-muted small">📍 {incident.location}</p>
             </li>
           ))}
         </ul>

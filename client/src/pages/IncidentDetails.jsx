@@ -58,38 +58,66 @@ function IncidentDetails() {
 
   return (
     <div className="container">
-      <div className="incident-detail">
+      <div className="incident-detail p-4 bg-light rounded shadow-sm">
         <h2>{incident.title}</h2>
         <p>{incident.description}</p>
-        <p className="location">Location: {incident.location}</p>
+        <p className="text-muted mb-2">
+          📍 {incident.location} &nbsp;|&nbsp; 👤 Reported by User #{incident.user_id}
+        </p>
 
         <h4 className="mt-4">Offers</h4>
-        <ul className="list-unstyled">
+        <ul className="list-group">
           {offers.map((offer) => (
-            <li key={offer.id} className="offer-item">
-              <span>{offer.message} - <em>{offer.status}</em></span>
-              <span>
-                {/* Only the incident reporter can accept offers */}
-                {offer.status === 'pending' && incident.user_id === currentUserId && (
-                  <button className="btn btn-success btn-sm me-2" onClick={() => handleAccept(offer.id)}>Accept</button>
-                )}
+            <li
+              key={offer.id}
+              className="list-group-item d-flex justify-content-between align-items-start flex-column flex-md-row"
+            >
+              <div>
+                <p className="mb-1">💬 {offer.message}</p>
+                <small className="text-muted">
+                  👤 User #{offer.user_id} &nbsp;|&nbsp; Status: <em>{offer.status}</em>
+                </small>
+              </div>
 
-                {/* Only the offer creator can delete their own offer */}
-                {offer.user_id === currentUserId && (
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDeleteOffer(offer.id)}>Delete</button>
+              <div className="mt-2 mt-md-0">
+                {offer.status === 'pending' && incident.user_id === currentUserId && (
+                  <button
+                    className="btn btn-success btn-sm me-2"
+                    onClick={() => handleAccept(offer.id)}
+                  >
+                    Accept
+                  </button>
                 )}
-              </span>
+                {offer.user_id === currentUserId && (
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => handleDeleteOffer(offer.id)}
+                  >
+                    Delete
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>
 
         {incident.user_id !== currentUserId ? (
           <form onSubmit={handleOfferSubmit} className="mt-4">
-            <textarea className="form-control mb-2" value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Offer help..." required></textarea>
-            <button className="btn btn-primary" type="submit">Send Offer</button>
+            <textarea
+              className="form-control mb-2"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Offer help..."
+              required
+            ></textarea>
+            <button className="btn btn-primary" type="submit">
+              Send Offer
+            </button>
           </form>
         ) : (
-          <p className="text-muted mt-4"><em>You reported this incident. You can manage incoming offers above.</em></p>
+          <p className="text-muted mt-4">
+            <em>You reported this incident. You can manage incoming offers above.</em>
+          </p>
         )}
       </div>
     </div>

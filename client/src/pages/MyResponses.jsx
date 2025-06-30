@@ -30,7 +30,7 @@ function MyResponses() {
           {offers.map((offer) => {
             const incident = getIncident(offer.incident_id);
             return (
-              <li key={offer.id} className="response-card">
+              <li key={offer.id} className="list-group-item response-card">
                 {incident ? (
                   <>
                     <Link to={`/incident/${incident.id}`} className="fw-bold text-decoration-none">
