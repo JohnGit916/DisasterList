@@ -4,24 +4,51 @@ import { Link } from 'react-router-dom';
 
 function Dashboard() {
   const [incidents, setIncidents] = useState([]);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
-    fetchWithToken('/incidents').then(data => {
-      const userId = localStorage.getItem('token'); // simplistic check
-      setIncidents(data.filter(i => i.user_id));
-    });
+    decodeToken();
+    fetchData();
   }, []);
 
+  const decodeToken = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        setCurrentUserId(parseInt(payload.sub || payload.user_id || payload.identity || payload.id));
+      } catch (err) {
+        console.error("Error decoding token:", err);
+      }
+    }
+  };
+
+  const fetchData = async () => {
+    const allIncidents = await fetchWithToken('/incidents');
+    setIncidents(allIncidents);
+  };
+
+  const filteredIncidents = incidents.filter(
+    (incident) => incident.user_id === currentUserId
+  );
+
   return (
-    <div>
-      <h2>My Reported Incidents</h2>
-      <ul className="list-group">
-        {incidents.map(incident => (
-          <li key={incident.id} className="list-group-item">
-            <Link to={`/incident/${incident.id}`}>{incident.title}</Link>
-          </li>
-        ))}
-      </ul>
+    <div className="container">
+      <h2 className="mb-4">My Reported Incidents</h2>
+      {filteredIncidents.length === 0 ? (
+        <p className="text-muted">You haven't reported any incidents yet.</p>
+      ) : (
+        <ul className="list-group">
+          {filteredIncidents.map((incident) => (
+            <li key={incident.id} className="dashboard-card">
+              <Link to={`/incident/${incident.id}`} className="text-decoration-none fw-bold">
+                {incident.title}
+              </Link>
+              <p className="text-muted mb-0">{incident.location}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
