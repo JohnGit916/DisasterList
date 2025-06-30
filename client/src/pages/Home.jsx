@@ -6,29 +6,44 @@ function Home() {
   const [incidents, setIncidents] = useState([]);
 
   useEffect(() => {
-    fetchWithToken('/incidents')
-      .then(data => setIncidents(data));
+    fetchWithToken('/incidents').then(setIncidents);
   }, []);
 
   return (
-    <div className="container">
+    <div className="container py-4">
       <h2 className="mb-4">Reported Incidents</h2>
-      <div className="row">
-        {incidents.map((incident) => (
-          <div key={incident.id} className="col-md-6 mb-4">
-            <div className="incident-card p-3 border rounded shadow-sm h-100">
-              <h5 className="mb-2">{incident.title}</h5>
-              <p className="text-muted small mb-1">
-                📍 {incident.location} &nbsp;|&nbsp; 👤 User #{incident.user_id}
-              </p>
-              <p>{incident.description.slice(0, 100)}...</p>
-              <Link to={`/incident/${incident.id}`} className="btn btn-outline-primary btn-sm mt-2">
-                View Details
-              </Link>
+      {incidents.length === 0 ? (
+        <p className="text-muted">No incidents have been reported yet.</p>
+      ) : (
+        <div className="row">
+          {incidents.map((incident) => (
+            <div key={incident.id} className="col-md-6 mb-4">
+              <div className="card shadow-sm h-100">
+                <div className="card-body">
+                  <h5 className="card-title">{incident.title}</h5>
+                  <h6 className="card-subtitle mb-2 text-muted">
+                    📍 {incident.location || 'Unknown'} &nbsp;|&nbsp; 👤 User #{incident.user_id}
+                  </h6>
+                  {incident.created_at && (
+                    <p className="text-muted small mb-1">
+                      🕒 {new Date(incident.created_at).toLocaleString()}
+                    </p>
+                  )}
+                  <p className="card-text">
+                    {incident.description?.slice(0, 100)}...
+                  </p>
+                  <Link
+                    to={`/incident/${incident.id}`}
+                    className="btn btn-outline-primary btn-sm"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

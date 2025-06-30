@@ -16,8 +16,21 @@ function Login() {
     const data = await res.json();
     if (data.access_token) {
       localStorage.setItem('token', data.access_token);
+
+      // Decode token and store username
+      try {
+        const payload = JSON.parse(atob(data.access_token.split('.')[1]));
+        if (payload.username) {
+          localStorage.setItem('username', payload.username);
+        }
+      } catch (err) {
+        console.error("Error decoding token:", err);
+      }
+
       navigate('/');
-    } else alert(data.error);
+    } else {
+      alert(data.error);
+    }
   };
 
   return (

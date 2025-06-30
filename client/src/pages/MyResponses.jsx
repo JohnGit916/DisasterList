@@ -21,7 +21,7 @@ function MyResponses() {
     incidents.find((i) => i.id === incident_id);
 
   return (
-    <div className="container">
+    <div className="container py-4">
       <h2 className="mb-4">My Offers</h2>
       {offers.length === 0 ? (
         <p className="text-muted">You haven't submitted any offers yet.</p>
